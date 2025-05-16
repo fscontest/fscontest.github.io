@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rank Your Top 5 Horses</title>
+</head>
+<body>
+  <h2>Rank Your Top 5 Horses</h2>
+  <form id="horseForm">
+    <div id="horseSelections"></div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const horses = [
+      "Basin", "Beau Liam", "By My Standards", "Chance It", "Charlatan", "Cistron", "Code of Honor",
+      "Combatant", "Core Beliefs", "Engage", "Essential Quality", "Galawi (Ire)", "Galilean", "Halladay",
+      "Independence Hall", "Knicks Go", "Known Agenda", "Leinster", "Lexitonian", "Maxfield", "Mo Forza",
+      "Modernist", "No Parole", "Per Capita", "Raging Bull", "Rock Your World", "Rushie", "Silver State",
+      "Sleepy Eyes Todd", "Sombeyay", "Tacitus", "Tap Back", "Three Rules", "Uncle Chuck", "Waiting", "Yaupon"
+    ];
+
+    const totalSelections = 5;
+    const form = document.getElementById('horseForm');
+    const container = document.getElementById('horseSelections');
+    const selects = [];
+
+    function createSelect(index) {
+      const label = document.createElement('label');
+      label.textContent = `Choice #${index + 1}: `;
+      const select = document.createElement('select');
+      select.name = `choice${index + 1}`;
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = "";
+      defaultOption.text = "Select a horse";
+      select.appendChild(defaultOption);
+
+      horses.forEach(horse => {
+        const option = document.createElement('option');
+        option.value = horse;
+        option.text = horse;
+        select.appendChild(option);
+      });
+
+      select.addEventListener('change', updateSelectOptions);
+
+      label.appendChild(select);
+      container.appendChild(label);
+      container.appendChild(document.createElement('br'));
+
+      selects.push(select);
+    }
+
+    function updateSelectOptions() {
+      const selectedValues = selects.map(sel => sel.value).filter(val => val !== "");
+
+      selects.forEach(select => {
+        Array.from(select.options).forEach(option => {
+          if (option.value === "") return; // Skip placeholder
+          option.disabled = selectedValues.includes(option.value) && select.value !== option.value;
+        });
+      });
+    }
+
+    for (let i = 0; i < totalSelections; i++) {
+      createSelect(i);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      console.log('Submitted rankings:');
+      for (let [key, value] of data.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+      alert("Selections submitted! Check console for results.");
+    });
+  </script>
+</body>
+</html>
