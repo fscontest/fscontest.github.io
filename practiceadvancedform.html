@@ -1,83 +1,108 @@
-<script>
-  let horses = [
-    "Sleepy Eyes Todd (under 50)", "Three Rules (under 50)", "Cistron (under 50)", "Waiting (under 50)", 
-    "Rushie (under 50)", "Sombeyay (under 50)", "No Parole (under 50)", "Galawi (Ire) (under 50)", 
-    "Core Beliefs (under 50)", "Chance It (under 50)", "Per Capita (under 50)", "Tap Back (under 50)", 
-    "Galilean (under 50)", "Halladay (under 50)", "Leinster (under 50)", "Combatant (under 50)", 
-    "Engage (under 50)", "Lexitonian", "Basin", "Code of Honor", "By My Standards", "Mo Forza", 
-    "Uncle Chuck", "Modernist", "Raging Bull", "Beau Liam", "Maxfield", "Known Agenda", "Knicks Go", 
-    "Essential Quality", "Independence Hall", "Tacitus", "Silver State", "Rock Your World", 
-    "Charlatan", "Yaupon"
-  ];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rank Your Top 5 Horses</title>
+</head>
+<body>
+  <h2>Rank Your Top 5 Horses</h2>
 
-  horses.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  <form id="horseForm">
+    <!-- Name and Email Inputs -->
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+    <br><br>
 
-  const totalSelections = 5;
-  const form = document.getElementById('horseForm');
-  const container = document.getElementById('horseSelections');
-  const selects = [];
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required>
+    <br><br>
 
-  function isUnder50(horse) {
-    return horse.includes('(under 50)');
-  }
+    <!-- Horse Selection Dropdowns -->
+    <div id="horseSelections"></div>
 
-  function createSelect(index) {
-    const label = document.createElement('label');
-    label.textContent = `Choice #${index + 1}: `;
-    const select = document.createElement('select');
-    select.name = `choice${index + 1}`;
+    <button type="submit">Submit</button>
+  </form>
 
-    const defaultOption = document.createElement('option');
-    defaultOption.value = "";
-    defaultOption.text = "Select a horse";
-    select.appendChild(defaultOption);
+  <script>
+    let horses = [
+      "Sleepy Eyes Todd (under 50)", "Three Rules (under 50)", "Cistron (under 50)", "Waiting (under 50)", 
+      "Rushie (under 50)", "Sombeyay (under 50)", "No Parole (under 50)", "Galawi (Ire) (under 50)", 
+      "Core Beliefs (under 50)", "Chance It (under 50)", "Per Capita (under 50)", "Tap Back (under 50)", 
+      "Galilean (under 50)", "Halladay (under 50)", "Leinster (under 50)", "Combatant (under 50)", 
+      "Engage (under 50)", "Lexitonian", "Basin", "Code of Honor", "By My Standards", "Mo Forza", 
+      "Uncle Chuck", "Modernist", "Raging Bull", "Beau Liam", "Maxfield", "Known Agenda", "Knicks Go", 
+      "Essential Quality", "Independence Hall", "Tacitus", "Silver State", "Rock Your World", 
+      "Charlatan", "Yaupon"
+    ];
 
-    horses.forEach(horse => {
-      const option = document.createElement('option');
-      option.value = horse;
-      option.text = horse;
-      select.appendChild(option);
-    });
+    // Sort horses alphabetically, case-insensitive
+    horses.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
-    select.addEventListener('change', updateSelectOptions);
+    const totalSelections = 5;
+    const form = document.getElementById('horseForm');
+    const container = document.getElementById('horseSelections');
+    const selects = [];
 
-    label.appendChild(select);
-    container.appendChild(label);
-    container.appendChild(document.createElement('br'));
-
-    selects.push(select);
-  }
-
-  function updateSelectOptions() {
-    const selectedValues = selects.map(sel => sel.value).filter(val => val !== "");
-    const selectedUnder50 = selectedValues.find(val => isUnder50(val));
-
-    selects.forEach(select => {
-      Array.from(select.options).forEach(option => {
-        if (option.value === "") return; // Skip placeholder
-
-        // Disable duplicates
-        const isSelectedElsewhere = selectedValues.includes(option.value) && select.value !== option.value;
-
-        // Disable all other (under 50) if one is already selected
-        const shouldDisableUnder50Group = selectedUnder50 && isUnder50(option.value) && option.value !== select.value;
-
-        option.disabled = isSelectedElsewhere || shouldDisableUnder50Group;
-      });
-    });
-  }
-
-  for (let i = 0; i < totalSelections; i++) {
-    createSelect(i);
-  }
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    console.log('Submitted form data:');
-    for (let [key, value] of data.entries()) {
-      console.log(`${key}: ${value}`);
+    function isUnder50(horse) {
+      return horse.includes('(under 50)');
     }
-    alert("Selections submitted! Check the console for output.");
-  });
-</script>
+
+    function createSelect(index) {
+      const label = document.createElement('label');
+      label.textContent = `Choice #${index + 1}: `;
+      const select = document.createElement('select');
+      select.name = `choice${index + 1}`;
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = "";
+      defaultOption.text = "Select a horse";
+      select.appendChild(defaultOption);
+
+      horses.forEach(horse => {
+        const option = document.createElement('option');
+        option.value = horse;
+        option.text = horse;
+        select.appendChild(option);
+      });
+
+      select.addEventListener('change', updateSelectOptions);
+
+      label.appendChild(select);
+      container.appendChild(label);
+      container.appendChild(document.createElement('br'));
+
+      selects.push(select);
+    }
+
+    function updateSelectOptions() {
+      const selectedValues = selects.map(sel => sel.value).filter(val => val !== "");
+      const selectedUnder50 = selectedValues.find(val => isUnder50(val));
+
+      selects.forEach(select => {
+        Array.from(select.options).forEach(option => {
+          if (option.value === "") return; // Skip placeholder
+
+          const isSelectedElsewhere = selectedValues.includes(option.value) && select.value !== option.value;
+          const shouldDisableUnder50Group = selectedUnder50 && isUnder50(option.value) && option.value !== select.value;
+
+          option.disabled = isSelectedElsewhere || shouldDisableUnder50Group;
+        });
+      });
+    }
+
+    for (let i = 0; i < totalSelections; i++) {
+      createSelect(i);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      console.log('Submitted form data:');
+      for (let [key, value] of data.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+      alert("Selections submitted! Check the console for output.");
+    });
+  </script>
+</body>
+</html>
