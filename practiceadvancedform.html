@@ -6,8 +6,20 @@
 </head>
 <body>
   <h2>Rank Your Top 5 Horses</h2>
+
   <form id="horseForm">
+    <!-- Name and Email Inputs -->
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+    <br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required>
+    <br><br>
+
+    <!-- Horse Selection Dropdowns -->
     <div id="horseSelections"></div>
+
     <button type="submit">Submit</button>
   </form>
 
@@ -70,11 +82,11 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const data = new FormData(form);
-      console.log('Submitted rankings:');
+      console.log('Submitted form data:');
       for (let [key, value] of data.entries()) {
         console.log(`${key}: ${value}`);
       }
-      alert("Selections submitted! Check console for results.");
+      alert("Selections submitted! Check the console for output.");
     });
   </script>
 </body>
