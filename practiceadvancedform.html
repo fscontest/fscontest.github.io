@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Freshman Sire Contest 2025</title>
+  <title>Freshman Sire Contest 2025 Entry Form</title>
 </head>
 <body>
-  <h2>Freshman Sire Contest 2025</h2>
+  <h2>Freshman Sire Contest 2025 Entry Form</h2>
 
   <form id="horseForm">
     <!-- Name and Email Inputs -->
@@ -35,7 +35,7 @@
       "Charlatan", "Yaupon"
     ];
 
-    // Sort horses alphabetically, case-insensitive
+    // Sort horses alphabetically (case-insensitive)
     horses.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
     const totalSelections = 5;
@@ -77,15 +77,34 @@
     function updateSelectOptions() {
       const selectedValues = selects.map(sel => sel.value).filter(val => val !== "");
       const selectedUnder50 = selectedValues.find(val => isUnder50(val));
+      const under50Required = !selects.slice(0, 4).some(sel => isUnder50(sel.value));
 
-      selects.forEach(select => {
+      selects.forEach((select, index) => {
         Array.from(select.options).forEach(option => {
-          if (option.value === "") return; // Skip placeholder
+          if (option.value === "") return;
 
           const isSelectedElsewhere = selectedValues.includes(option.value) && select.value !== option.value;
-          const shouldDisableUnder50Group = selectedUnder50 && isUnder50(option.value) && option.value !== select.value;
+          const isOptionUnder50 = isUnder50(option.value);
 
-          option.disabled = isSelectedElsewhere || shouldDisableUnder50Group;
+          let shouldDisable = false;
+
+          // Global rule: disable duplicates
+          if (isSelectedElsewhere) {
+            shouldDisable = true;
+          }
+
+          // Rule: if any under50 is selected, block other under50s
+          if (selectedUnder50 && isOptionUnder50 && select.value !== option.value) {
+            shouldDisable = true;
+          }
+
+          // Rule: if no under50 has been selected in choices 1–4,
+          // then in choice #5, disable non-under50 horses
+          if (under50Required && index === 4 && !isOptionUnder50) {
+            shouldDisable = true;
+          }
+
+          option.disabled = shouldDisable;
         });
       });
     }
