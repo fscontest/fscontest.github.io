@@ -24,7 +24,7 @@
   </form>
 
   <script>
-    const horses = [
+    let horses = [
       "Sleepy Eyes Todd (under 50)", "Three Rules (under 50)", "Cistron (under 50)", "Waiting (under 50)", 
       "Rushie (under 50)", "Sombeyay (under 50)", "No Parole (under 50)", "Galawi (Ire) (under 50)", 
       "Core Beliefs (under 50)", "Chance It (under 50)", "Per Capita (under 50)", "Tap Back (under 50)", 
@@ -34,6 +34,9 @@
       "Essential Quality", "Independence Hall", "Tacitus", "Silver State", "Rock Your World", 
       "Charlatan", "Yaupon"
     ];
+
+    // Sort the horse list alphabetically (case-insensitive)
+    horses.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
     const totalSelections = 5;
     const form = document.getElementById('horseForm');
